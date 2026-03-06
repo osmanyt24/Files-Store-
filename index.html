@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apk Bazzer</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root { --primary: #00f2ea; --bg-dark: #121218; --text-main: #ffffff; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--bg-dark); 
+        background-image: radial-gradient(circle at top left, rgba(0, 242, 234, 0.08) 0%, transparent 40%), 
+                          radial-gradient(circle at bottom right, rgba(255, 0, 80, 0.08) 0%, transparent 40%); 
+        color: var(--text-main); 
+        padding: 20px; 
+        min-height: 100vh; 
+    }
+    
+    /* 3D Header */
+    .header { text-align: center; margin-bottom: 40px; margin-top: 10px; }
+    .header h1 { 
+        color: #fff; font-size: 30px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+        text-shadow: 2px 2px 0px #000, 4px 4px 10px rgba(0, 242, 234, 0.5); 
+    }
+    .header p { color: #888; margin-top: 8px; font-size: 14px; font-weight: 500; }
+
+    /* 3D App Grid */
+    .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; width: 100%; }
+    
+    /* 3D App Card (Permanent 3D Look) */
+    .app-card { 
+        background: linear-gradient(145deg, #161620, #13131c); 
+        border-radius: 20px; padding: 20px 15px; text-align: center; position: relative; cursor: pointer; 
+        border: 1px solid rgba(255,255,255,0.03);
+        box-shadow: 8px 8px 16px #09090c, -8px -8px 16px #1b1b24;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .app-card:active { transform: scale(0.96); box-shadow: inset 5px 5px 10px #09090c, inset -5px -5px 10px #1b1b24; }
+    
+    /* 3D Logo */
+    .logo-wrapper { position: relative; display: inline-block; margin-bottom: 12px; }
+    .app-icon { 
+        width: 75px; height: 75px; border-radius: 20px; object-fit: cover; display: block; 
+        border: 2px solid rgba(0, 242, 234, 0.2);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.8), inset 0 3px 6px rgba(255,255,255,0.2); 
+    }
+    .verified-badge { 
+        position: absolute; bottom: -5px; right: -8px; background: linear-gradient(135deg, #00f2ea, #0088ff); 
+        color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+        font-size: 11px; border: 2px solid var(--bg-dark); z-index: 2; box-shadow: 0 4px 8px rgba(0,0,0,0.6); 
+    }
+
+    .app-card h3 { font-size: 14px; margin-bottom: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; font-weight: 600; }
+    
+    /* 3D Mini Button */
+    .btn-mini { 
+        background: linear-gradient(135deg, #00f2ea, #00c6fb); color: #000; padding: 8px 20px; border-radius: 20px; 
+        font-size: 12px; font-weight: 700; display: inline-block; 
+        box-shadow: 0 6px 12px rgba(0, 242, 234, 0.3), inset 0 2px 2px rgba(255,255,255,0.5); 
+    }
+
+    /* Download Page Styles */
+    #downloadSection { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 85vh; margin-top: 20px; }
+    .download-card { 
+        background: linear-gradient(145deg, #181824, #14141d); border: 1px solid rgba(0,242,234,0.1); 
+        padding: 40px 30px; border-radius: 30px; text-align: center; max-width: 420px; width: 100%; 
+        box-shadow: 15px 15px 30px #09090c, -15px -15px 30px #1b1b24; 
+    }
+    .app-icon-large { 
+        width: 110px; height: 110px; border-radius: 28px; border: 2px solid rgba(0,242,234,0.3); 
+        box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 5px 10px rgba(255,255,255,0.2); margin-bottom: 20px; 
+    }
+    
+    /* 3D Large Buttons */
+    .btn { 
+        width: 100%; padding: 16px; border: none; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; 
+        display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; text-decoration: none; 
+        transition: 0.2s; box-shadow: 0 8px 15px rgba(0,0,0,0.5), inset 0 3px 5px rgba(255,255,255,0.3); 
+    }
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+    
+    #unlockBtn { background: linear-gradient(135deg, #ff0050, #ff416c); color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    #downloadBtn { background: #222; color: #666; pointer-events: none; opacity: 0.7; box-shadow: inset 0 4px 10px rgba(0,0,0,0.8); }
+    #downloadBtn.active { 
+        background: linear-gradient(135deg, #00f2ea, #00c6fb); color: black; pointer-events: auto; opacity: 1; 
+        box-shadow: 0 10px 20px rgba(0,242,234,0.4), inset 0 3px 5px rgba(255,255,255,0.6); animation: pulse 1.5s infinite; 
+    }
+
+    /* 3D Progress Bar */
+    .progress-container { background: #0a0a0f; height: 12px; border-radius: 10px; margin-bottom: 10px; overflow: hidden; box-shadow: inset 0 3px 6px rgba(0,0,0,0.9); }
+    .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00f2ea, #00c6fb); border-radius: 10px; transition: width 0.2s linear; box-shadow: 0 0 10px rgba(0,242,234,0.8); }
+    
+    .back-btn { 
+        position: fixed; top: 20px; left: 20px; background: #161620; color: white; padding: 12px 25px; border-radius: 30px; cursor: pointer; 
+        display: none; z-index: 100; font-size: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,0.05); 
+        box-shadow: 5px 5px 10px #09090c, -5px -5px 10px #1b1b24; transition: 0.2s; 
+    }
+    .back-btn:active { transform: scale(0.95); box-shadow: inset 3px 3px 6px #09090c, inset -3px -3px 6px #1b1b24; }
+
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,242,234,0.6); } 70% { box-shadow: 0 0 0 15px rgba(0,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } }
+</style>
+</head>
+<body>
+
+<button id="backBtn" class="back-btn" onclick="goToHome()"><i class="fas fa-arrow-left"></i> Back</button>
+
+<div id="homeSection">
+    <div class="header">
+        <h1 id="siteTitle">PREMIUM STORE</h1>
+        <p>100% Working Apps Download </p>
+    </div>
+    <div id="appGrid" class="app-grid">
+        <p style="text-align:center; color:#555; grid-column: 1/-1;">Loading Apps...</p>
+    </div>
+</div>
+
+<div id="downloadSection">
+    <div class="download-card">
+        <span style="color:var(--primary); font-size:12px; font-weight:700; border:1px solid var(--primary); padding:6px 15px; border-radius:20px; background:rgba(0,242,234,0.1); box-shadow: 0 0 10px rgba(0,242,234,0.2);">PREMIUM UNLOCKED</span>
+        <br><br>
+        
+        <div style="position:relative; display:inline-block;">
+            <img id="d_logo" src="" class="app-icon-large">
+            <div class="verified-badge" style="width:30px; height:30px; bottom:15px; right:-10px; font-size: 14px;"><i class="fas fa-check"></i></div>
+        </div>
+
+        <h2 id="d_name" style="margin-bottom: 5px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Loading...</h2>
+        <div style="color:#aaa; font-size:14px; margin-bottom:25px; display:flex; justify-content:center; gap:20px; font-weight: 600;">
+            <span><i class="fas fa-shield-alt" style="color:var(--primary); text-shadow: 0 0 5px var(--primary);"></i> Secure</span>
+            <span><i class="fas fa-bolt" style="color:#ffc107; text-shadow: 0 0 5px #ffc107;"></i> Fast</span>
+        </div>
+        
+        <button id="unlockBtn" class="btn" onclick="startUnlockProcess()">
+            <i class="fas fa-play"></i> Watch Ad to Unlock
+        </button>
+        
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <p id="statusMsg" style="font-size:14px; color:var(--primary); display:none; margin-bottom:15px; font-weight:bold;"></p>
+
+        <a id="downloadBtn" class="btn" href="#">
+            <i class="fas fa-lock"></i> Download Locked
+        </a>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyC2GmzCFrffLkV5yd7ZgD3jdcRjtoFuAoQ",
+  authDomain: "apk-bazzer.firebaseapp.com",
+  databaseURL: "https://apk-bazzer-default-rtdb.firebaseio.com",
+  projectId: "apk-bazzer",
+  storageBucket: "apk-bazzer.firebasestorage.app",
+  messagingSenderId: "746840699864",
+  appId: "1:746840699864:web:7446f4de442262874c38ad",
+  measurementId: "G-YZXHWGY28Z"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 🔴 Live Website Name Update 🔴
+    const siteTitleEl = document.getElementById('siteTitle');
+    onValue(ref(db, 'settings/siteName'), (snapshot) => {
+        if (snapshot.exists()) {
+            const newName = snapshot.val();
+            siteTitleEl.innerText = newName;
+            document.title = newName;
+        }
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    window.goToHome = function() {
+        document.getElementById('downloadSection').style.display = 'none';
+        document.getElementById('homeSection').style.display = 'block';
+        document.getElementById('backBtn').style.display = 'none';
+        history.pushState({}, null, window.location.pathname);
+    }
+
+    if (postId) { showDownloadPage(postId); } 
+    else { window.goToHome(); loadAllApps(); }
+
+    function loadAllApps() {
+        const grid = document.getElementById('appGrid');
+        onValue(ref(db, 'posts'), (snapshot) => {
+            grid.innerHTML = "";
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    const id = child.key;
+                    const data = child.val();
+                    const card = `
+                        <div class="app-card" onclick="window.location.href='?id=${id}'">
+                            <div class="logo-wrapper">
+                                <img src="${data.appLogo}" class="app-icon" onerror="this.src='https://via.placeholder.com/100'">
+                                <div class="verified-badge"><i class="fas fa-check"></i></div>
+                            </div>
+                            <h3>${data.appName}</h3>
+                            <div class="btn-mini">GET APP</div>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+            } else {
+                grid.innerHTML = "<p style='color:white; grid-column: 1/-1; text-align:center;'>No apps available.</p>";
+            }
+        });
+    }
+
+    let currentAdLink = "";
+    let currentDownLink = "";
+    let currentTimer = 10;
+
+    function showDownloadPage(id) {
+        document.getElementById('homeSection').style.display = 'none';
+        document.getElementById('downloadSection').style.display = 'flex';
+        document.getElementById('backBtn').style.display = 'block';
+
+        get(ref(db, 'posts/' + id)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                document.getElementById('d_name').innerText = data.appName;
+                document.getElementById('d_logo').src = data.appLogo;
+                currentAdLink = data.adLink;
+                currentDownLink = data.downLink;
+                currentTimer = parseInt(data.timerSec) || 5;
+            } else {
+                alert("App Removed!");
+                window.goToHome();
+            }
+        });
+    }
+
+    window.startUnlockProcess = function() {
+        if(!currentAdLink) return alert("Ad Link not ready!");
+
+        const unlockBtn = document.getElementById('unlockBtn');
+        const progressBar = document.getElementById('progressBar');
+        const statusMsg = document.getElementById('statusMsg');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        window.open(currentAdLink, '_blank');
+
+        unlockBtn.style.opacity = "0.5";
+        unlockBtn.style.pointerEvents = "none";
+        unlockBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        
+        statusMsg.style.display = "block";
+        
+        const startTime = Date.now();
+        const endTime = startTime + (currentTimer * 1000);
+
+        const timerInterval = setInterval(() => {
+            const now = Date.now();
+            const remainingTime = Math.max(0, Math.ceil((endTime - now) / 1000));
+            const elapsed = now - startTime;
+            const totalDuration = currentTimer * 1000;
+            
+            let percentage = (elapsed / totalDuration) * 100;
+            if(percentage > 100) percentage = 100;
+            progressBar.style.width = percentage + '%';
+            
+            statusMsg.innerText = `Please wait ${remainingTime} seconds...`;
+
+            if (now >= endTime) {
+                clearInterval(timerInterval);
+                unlockBtn.style.display = "none";
+                statusMsg.style.display = "none";
+                progressBar.style.width = "100%";
+                
+                downloadBtn.classList.add('active');
+                downloadBtn.href = currentDownLink;
+                downloadBtn.target = "_blank";
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Premium';
+            }
+        }, 100);
+    }
+</script>
+</body>
+</html>
